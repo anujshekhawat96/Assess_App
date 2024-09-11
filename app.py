@@ -1,7 +1,7 @@
 import streamlit as st
 # from sklearn.externals import joblib  
 import pandas as pd
-#import plotly.express as px
+import plotly.express as px
 
 # Load your machine learning model
 # model = joblib.load('models/your_model.pkl')
@@ -14,9 +14,8 @@ def show_eda_page():
     df = pd.read_csv('data/insurance_test.csv')
     # st.write(df.head(10))
     # Conduct and display EDA 
-    
-    #fig = px.histogram(df, x='age', title='Age Distribution')
-    #st.plotly_chart(fig)
+    fig = px.histogram(df, x='age', title='Age Distribution')
+    st.plotly_chart(fig)
     st.write(rf'Include your insights from the chart here...','\n', 'add as many charts are you feel are necessary.')
 
 
