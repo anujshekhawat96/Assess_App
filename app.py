@@ -48,7 +48,7 @@ def show_test_model_page():
 
 def all_eda_methods(df):
 
-    
+
     def dataset_overview(df):
         st.header("Dataset Overview")
         st.write("Number of Rows:", df.shape[0])
@@ -82,12 +82,9 @@ def all_eda_methods(df):
     
         st.header("Summary Statistics")
         st.write(df.describe())
+       
 
 
-
-
-        
-        
     def correlation_heatmap(df):
         st.header("Correlation Heatmap")
         
@@ -95,13 +92,32 @@ def all_eda_methods(df):
         fig, ax = plt.subplots(figsize=(10, 6))
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
         st.pyplot(fig)
-    
-    
-    	
-   # add tabs
-    tab1, tab2, tab3 = st.tabs(["Data Info", "Numeric Features", "Categorical Features"])
     dataset_overview(df)
     correlation_heatmap(df)
+    
+    numeric_cols = df.select_dtypes(include='number').columns.tolist()
+    selected_num_col = st.selectbox("Which numeric column do you want to explore?", numeric_cols)
+    st.header(f"{selected_num_col} - Statistics")
+     
+    col_info = {}
+    col_info["Number of Unique Values"] = len(df[selected_num_col].unique())
+    col_info["Number of Rows with Missing Values"] = df[selected_num_col].isnull().sum()
+    col_info["Number of Rows with 0"] = df[selected_num_col].eq(0).sum()
+    col_info["Number of Rows with Negative Values"] = df[selected_num_col].lt(0).sum()
+    col_info["Average Value"] = df[selected_num_col].mean()
+    col_info["Standard Deviation Value"] = df[selected_num_col].std()
+    col_info["Minimum Value"] = df[selected_num_col].min()
+    col_info["Maximum Value"] = df[selected_num_col].max()
+    col_info["Median Value"] = df[selected_num_col].median()
+    info_df = pd.DataFrame(list(col_info.items()), columns=['Description', 'Value'])
+    st.dataframe(info_df)
+
+ 
+        
+ 
+
+   
+    
 
 # Sidebar navigation
 st.sidebar.title('Navigation')
