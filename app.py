@@ -2,7 +2,8 @@ import streamlit as st
 # from sklearn.externals import joblib  
 import pandas as pd
 import plotly.express as px
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 # Load your machine learning model
 # model = joblib.load('models/your_model.pkl')
 
@@ -11,14 +12,14 @@ def show_eda_page():
     st.title('Exploratory Data Analysis')
     st.write('Summary of findings...')
     # Load and display your dataset
-    df = pd.read_csv('insurance_test.csv')
+    df_insurance = pd.read_csv('insurance_test.csv')
     # st.write(df.head(10))
     # Conduct and display EDA 
-    fig = px.histogram(df, x='age', title='Age Distribution')
+    fig = px.histogram(df_insurance, x='age', title='Age Distribution')
     st.plotly_chart(fig)
     st.write(rf'Include your insights from the chart here...','\n', 'add as many charts are you feel are necessary.')
-
-
+    all_eda_methods(df_insurance)
+    
 
     
     # Generate and display charts
@@ -44,6 +45,64 @@ def show_test_model_page():
         # result = model.predict(processed_input_data)
         st.write('Prediction result: ...')
 
+
+def all_eda_methods(df):
+
+    
+    def dataset_overview(df):
+        st.header("Dataset Overview")
+        st.write("Number of Rows:", df.shape[0])
+        st.write("Number of Columns:", df.shape[1])
+       
+          # Use the duplicated() function to identify duplicate rows
+        row_count = df.shape[0]
+ 
+        column_count = df.shape[1]
+        duplicates = df[df.duplicated()]
+        duplicate_row_count =  duplicates.shape[0]
+ 
+        missing_value_row_count = df[df.isna().any(axis=1)].shape[0]
+ 
+        table_markdown = f"""
+          | Description | Value | 
+          |---|---|
+          | Number of Rows | {row_count} |
+          | Number of Columns | {column_count} |
+          | Number of Duplicated Rows | {duplicate_row_count} |
+          | Number of Rows with Missing Values | {missing_value_row_count} |
+          """
+        st.markdown(table_markdown)
+        numeric_cols = df.select_dtypes(include='number').columns.tolist()
+        
+ 
+       
+ 
+       
+     
+    
+        st.header("Summary Statistics")
+        st.write(df.describe())
+
+
+
+
+        
+        
+    def correlation_heatmap(df):
+        st.header("Correlation Heatmap")
+        
+        corr = df.corr()
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
+        st.pyplot(fig)
+    
+    
+    	
+   # add tabs
+    tab1, tab2, tab3 = st.tabs(["Data Info", "Numeric Features", "Categorical Features"])
+    dataset_overview(df)
+    correlation_heatmap(df)
+
 # Sidebar navigation
 st.sidebar.title('Navigation')
 page = st.sidebar.radio('Go to', ['EDA', 'Insights', 'Test Model'])
@@ -54,3 +113,4 @@ elif page == 'Insights':
     show_insights_page()
 elif page == 'Test Model':
     show_test_model_page()
+
