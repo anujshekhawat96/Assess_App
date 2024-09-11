@@ -91,7 +91,7 @@ def all_eda_methods(df):
         corr = df.corr()
         fig, ax = plt.subplots(figsize=(10, 6))
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
-        st.pyplot(fig)
+        #st.pyplot(fig)
     dataset_overview(df)
     correlation_heatmap(df)
     
