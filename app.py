@@ -11,7 +11,7 @@ def show_eda_page():
     st.title('Exploratory Data Analysis')
     st.write('Summary of findings...')
     # Load and display your dataset
-    df = pd.read_csv('data/insurance_test.csv')
+    df = pd.read_csv('insurance_test.csv')
     # st.write(df.head(10))
     # Conduct and display EDA 
     fig = px.histogram(df, x='age', title='Age Distribution')
