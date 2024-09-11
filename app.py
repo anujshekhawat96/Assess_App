@@ -91,9 +91,9 @@ def all_eda_methods(df):
         corr = df.corr()
         fig, ax = plt.subplots(figsize=(10, 6))
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
-        #st.pyplot(fig)
+        st.pyplot(fig)
     dataset_overview(df)
-    correlation_heatmap(df)
+    #correlation_heatmap(df)
     
     numeric_cols = df.select_dtypes(include='number').columns.tolist()
     selected_num_col = st.selectbox("Which numeric column do you want to explore?", numeric_cols)
