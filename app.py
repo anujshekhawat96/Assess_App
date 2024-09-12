@@ -39,7 +39,7 @@ def show_insights_page():
   
 
 def show_test_model_page():
-    st.title('Test the Model')
+    st.title('Predict the Insurance Charges')
     
     # Input form for test data
     input_data = st.text_input('Enter your input data here:')
@@ -217,6 +217,6 @@ if page == 'EDA':
     show_eda_page()
 elif page == 'Insights':
     show_insights_page()
-elif page == 'Test Model':
+elif page == 'Predict Insurance Charges':
     show_test_model_page()
 
