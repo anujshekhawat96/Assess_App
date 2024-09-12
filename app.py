@@ -7,17 +7,22 @@ import seaborn as sns
 # Load your machine learning model
 # model = joblib.load('models/your_model.pkl')
 
+
+##global data read 
+df_insurance = pd.read_csv('insurance_test.csv')
 # Define a function for each page
+
 def show_eda_page():
     st.title('Exploratory Data Analysis')
-    st.write('Summary of findings...')
+    
     # Load and display your dataset
     df_insurance = pd.read_csv('insurance_test.csv')
     # st.write(df.head(10))
     # Conduct and display EDA 
     fig = px.histogram(df_insurance, x='age', title='Age Distribution')
     st.plotly_chart(fig)
-    st.write(rf'Include your insights from the chart here...','\n', 'add as many charts are you feel are necessary.')
+    
+    ##EDA METHODS
     all_eda_methods(df_insurance)
     
 
@@ -28,10 +33,9 @@ def show_eda_page():
 def show_insights_page():
     st.title('Machine Learning Insights')
     # Display insights about the model or the data
-    st.write('Insight 1: ...')
-    st.write('Insight 2: ...')
-    st.write('Insight 3: ...')
-    st.write('Add insights as you feel are required.')
+    all_insights_methods(df_insurance)
+   
+  
 
 def show_test_model_page():
     st.title('Test the Model')
@@ -51,8 +55,7 @@ def all_eda_methods(df):
 
     def dataset_overview(df):
         st.header("Dataset Overview")
-        st.write("Number of Rows:", df.shape[0])
-        st.write("Number of Columns:", df.shape[1])
+        
        
           # Use the duplicated() function to identify duplicate rows
         row_count = df.shape[0]
@@ -93,9 +96,10 @@ def all_eda_methods(df):
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
         st.pyplot(fig)
     dataset_overview(df)
-    #correlation_heatmap(df)
+    correlation_heatmap(df)
     
     numeric_cols = df.select_dtypes(include='number').columns.tolist()
+
     selected_num_col = st.selectbox("Which numeric column do you want to explore?", numeric_cols)
     st.header(f"{selected_num_col} - Statistics")
      
@@ -111,12 +115,97 @@ def all_eda_methods(df):
     col_info["Median Value"] = df[selected_num_col].median()
     info_df = pd.DataFrame(list(col_info.items()), columns=['Description', 'Value'])
     st.dataframe(info_df)
+    
+    cat_cols = df.select_dtypes(include='object')
+    cat_cols_names = cat_cols.columns.tolist()
+ 
+
+    selected_cat_col = st.selectbox("Which text column do you want to explore?", cat_cols_names)
+ 
+    st.header(f"{selected_cat_col}")
+     
+    # add categorical column stats
+    cat_col_info = {}
+    cat_col_info["Number of Unique Values"] = len(df[selected_cat_col].unique())
+    cat_col_info["Number of Rows with Missing Values"] = df[selected_cat_col].isnull().sum()
+    cat_col_info["Number of Empty Rows"] = df[selected_cat_col].eq("").sum()
+    cat_col_info["Number of Rows with Only Whitespace"] = len(df[selected_cat_col][df[selected_cat_col].str.isspace()])
+    cat_col_info["Number of Rows with Only Lowercases"] = len(df[selected_cat_col][df[selected_cat_col].str.islower()])
+    cat_col_info["Number of Rows with Only Uppercases"] = len(df[selected_cat_col][df[selected_cat_col].str.isupper()])
+    cat_col_info["Number of Rows with Only Alphabet"] = len(df[selected_cat_col][df[selected_cat_col].str.isalpha()])
+    cat_col_info["Number of Rows with Only Digits"] = len(df[selected_cat_col][df[selected_cat_col].str.isdigit()])
+    cat_col_info["Mode Value"] = df[selected_cat_col].mode()[0]
+ 
+    cat_info_df = pd.DataFrame(list(cat_col_info.items()), columns=['Description', 'Value'])
+    st.dataframe(cat_info_df)
 
  
-        
- 
+    
 
-   
+
+def all_insights_methods(df):
+    # 1. Pie chart for the distribution of smokers vs non-smokers
+    st.subheader("Proportion of Smokers vs Non-Smokers (Pie Chart)")
+    smoker_counts = df['smoker'].value_counts()
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.pie(smoker_counts, labels=smoker_counts.index, autopct='%1.1f%%', startangle=90, colors=["#66b3ff", "#99ff99"])
+    ax.set_title('Proportion of Smokers vs Non-Smokers')
+    st.pyplot(fig)
+    
+    # 2. Pie chart for the distribution of gender
+    st.subheader("Proportion of Male vs Female (Pie Chart)")
+    gender_counts = df['sex'].value_counts()
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90, colors=["#ff9999", "#66b3ff"])
+    ax.set_title('Proportion of Male vs Female')
+    st.pyplot(fig)
+    
+
+    # 2. Distribution of BMI and its effect on medical charges (Scatter plot)
+    st.subheader("BMI vs Medical Charges (Scatter Plot)")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(x='bmi', y='charges', hue='smoker', data=df, ax=ax)
+    ax.set_title('BMI vs Medical Charges')
+    st.pyplot(fig)
+
+    # 3. Bar chart for average medical charges based on smoker status
+    st.subheader("Average Medical Charges by Smoker Status (Bar Chart)")
+    smoker_charges = df.groupby('smoker')['charges'].mean().reset_index()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x='smoker', y='charges', data=smoker_charges, ax=ax)
+    ax.set_title('Average Medical Charges by Smoker Status')
+    st.pyplot(fig)
+
+    # 4. Histogram for the distribution of BMI
+    st.subheader("Distribution of BMI (Histogram)")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.histplot(df['bmi'], bins=30, kde=True, ax=ax)
+    ax.set_title('Distribution of BMI')
+    st.pyplot(fig)
+
+    # 5. Region-wise analysis of medical charges (Bar Chart)
+    st.subheader("Average Medical Charges by Region (Bar Chart)")
+    region_charges = df.groupby('region')['charges'].mean().reset_index()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x='region', y='charges', data=region_charges, ax=ax)
+    ax.set_title('Average Medical Charges by Region')
+    st.pyplot(fig)
+
+    # 6. Children and its effect on medical charges (Bar Chart)
+    st.subheader("Average Medical Charges by Number of Children (Bar Chart)")
+    children_charges = df.groupby('children')['charges'].mean().reset_index()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x='children', y='charges', data=children_charges, ax=ax)
+    ax.set_title('Average Medical Charges by Number of Children')
+    st.pyplot(fig)
+
+    # 7. Medical charges distribution for male vs female (Bar Chart)
+    st.subheader("Average Medical Charges by Gender (Bar Chart)")
+    gender_charges = df.groupby('sex')['charges'].mean().reset_index()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x='sex', y='charges', data=gender_charges, ax=ax)
+    ax.set_title('Average Medical Charges by Gender')
+    st.pyplot(fig)
     
 
 # Sidebar navigation
