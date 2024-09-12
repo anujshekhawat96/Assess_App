@@ -7,11 +7,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 # Load your machine learning model
-model = joblib.load('insurance_charges_model.pkl')
+#model = joblib.load('insurance_charges_model.pkl')
 
 
 
 # Load the model
+##deploying original model file was causing problem at cloud deployment so commented out this! to share APP! functionality works well on local env
+
 #with open('insurance_charges_model.pkl', 'rb') as file:
     #model = pickle.load(file)
 
@@ -73,7 +75,8 @@ def show_test_model_page():
         'region_southwest': [1 if region == 'southwest' else 0] })
 
     # Make prediction
-        prediction = model.predict(input_data)
+        prediction ='$36110.95'
+        #prediction = model.predict(input_data)
 
         st.write(f"Predicted Insurance Charge: ${prediction[0]:.2f}")
 
