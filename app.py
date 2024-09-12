@@ -1,13 +1,18 @@
 import streamlit as st
- 
+# from sklearn.externals import joblib  
 import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 # Load your machine learning model
-# model = joblib.load('models/your_model.pkl')
+#model = joblib.load('models/your_model.pkl')
 
+
+
+# Load the model
+with open('insurance_charges_model.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 ##global data read 
 df_insurance = pd.read_csv('insurance_test.csv')
@@ -41,14 +46,35 @@ def show_insights_page():
 def show_test_model_page():
     st.title('Predict the Insurance Charges')
     
-    # Input form for test data
-    input_data = st.text_input('Enter your input data here:')
-    #Include a way to upload a csv file 
-    input_data = st.file_uploader('Upload a CSV file', type='csv')
-    if st.button('Predict'):
-        # Process input_data and predict
-        # result = model.predict(processed_input_data)
-        st.write('Prediction result: ...')
+   
+   
+   # Create input fields
+    age = st.text_input('Age', placeholder='Please Enter Value between 18 to 100')
+    bmi = st.text_input('BMI', placeholder='Please Enter Value between 5 to 100')
+    children = st.selectbox('Number of Children',['',0,1,2,3,4,5,6,7,8,9,10])
+    sex = st.selectbox('Sex', ['Please select a value from dropdown','male', 'female'])
+    smoker = st.selectbox('Smoker', ['Please select a value from dropdown','yes', 'no'])
+    region = st.selectbox('Region', ['Please select a value from dropdown','southwest', 'southeast', 'northwest', 'northeast'])
+
+# Create a submit button
+    if st.button('Predict Insurance Charges'):
+
+        # Prepare the input data
+        input_data = pd.DataFrame({
+        'age': [age],
+        'bmi': [bmi],
+        'children': [children],
+
+        'sex_male': [1 if sex == 'male' else 0],
+        'smoker_yes': [1 if smoker == 'yes' else 0],
+        'region_northwest': [1 if region == 'northwest' else 0],
+        'region_southeast': [1 if region == 'southeast' else 0],
+        'region_southwest': [1 if region == 'southwest' else 0] })
+
+    # Make prediction
+        prediction = model.predict(input_data)
+
+        st.write(f"Predicted Insurance Charge: ${prediction[0]:.2f}")
 
 
 def all_eda_methods(df):
@@ -97,7 +123,7 @@ def all_eda_methods(df):
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
         st.pyplot(fig)
     dataset_overview(df)
-    #correlation_heatmap(df)
+    correlation_heatmap(df)
     
     numeric_cols = df.select_dtypes(include='number').columns.tolist()
 
@@ -211,12 +237,12 @@ def all_insights_methods(df):
 
 # Sidebar navigation
 st.sidebar.title('Navigation')
-page = st.sidebar.radio('Go to', ['EDA', 'Insights', 'Test Model'])
+page = st.sidebar.radio('Go to', ['EDA', 'Insights', 'Predict Charges'])
 
 if page == 'EDA':
     show_eda_page()
 elif page == 'Insights':
     show_insights_page()
-elif page == 'Predict Insurance Charges':
+elif page == 'Predict Charges':
     show_test_model_page()
 
