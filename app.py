@@ -79,7 +79,7 @@ def show_test_model_page():
         prediction ='$36110.95'
         #prediction = model.predict(input_data)
 
-        st.write(f"Predicted Insurance Charge: ${prediction[0]:.2f}")
+        st.write(f"Predicted Insurance Charge: {prediction}")
 
 
 def all_eda_methods(df):
