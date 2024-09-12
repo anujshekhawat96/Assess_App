@@ -1,18 +1,19 @@
 import streamlit as st
-# from sklearn.externals import joblib  
+#from sklearn.externals import joblib 
+import joblib 
 import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 # Load your machine learning model
-#model = joblib.load('models/your_model.pkl')
+model = joblib.load('insurance_charges_model.pkl')
 
 
 
 # Load the model
-with open('insurance_charges_model.pkl', 'rb') as file:
-    model = pickle.load(file)
+#with open('insurance_charges_model.pkl', 'rb') as file:
+    #model = pickle.load(file)
 
 ##global data read 
 df_insurance = pd.read_csv('insurance_test.csv')
