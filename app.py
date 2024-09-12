@@ -123,6 +123,13 @@ def all_eda_methods(df):
     def correlation_heatmap(df):
         st.header("Correlation Heatmap")
         
+       
+
+
+      
+        df['sex'] = df['sex'].map({'female': 0, 'male': 1})
+        df['smoker'] = df['smoker'].map({'no': 0, 'yes': 1})
+        df = pd.get_dummies(df, columns=['region'], drop_first=True)
         corr = df.corr()
         fig, ax = plt.subplots(figsize=(10, 6))
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
