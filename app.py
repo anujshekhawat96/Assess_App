@@ -1,9 +1,10 @@
 import streamlit as st
-from sklearn.externals import joblib  
+#from sklearn.externals import joblib  
 import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pickle
 # Load your machine learning model
 # model = joblib.load('models/your_model.pkl')
 
