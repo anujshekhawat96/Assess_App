@@ -23,7 +23,8 @@ df_insurance = pd.read_csv('insurance_test.csv')
 
 def show_eda_page():
     st.title('Exploratory Data Analysis')
-    
+     ##EDA METHODS
+    all_eda_methods(df_insurance)
     # Load and display your dataset
     df_insurance = pd.read_csv('insurance_test.csv')
     # st.write(df.head(10))
@@ -31,8 +32,7 @@ def show_eda_page():
     fig = px.histogram(df_insurance, x='age', title='Age Distribution')
     st.plotly_chart(fig)
     
-    ##EDA METHODS
-    all_eda_methods(df_insurance)
+   
     
 
     
