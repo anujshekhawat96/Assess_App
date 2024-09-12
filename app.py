@@ -127,7 +127,7 @@ def all_eda_methods(df):
         sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
         st.pyplot(fig)
     dataset_overview(df)
-    correlation_heatmap(df)
+    #correlation_heatmap(df)
     
     numeric_cols = df.select_dtypes(include='number').columns.tolist()
 
