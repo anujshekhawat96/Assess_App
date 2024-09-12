@@ -23,10 +23,11 @@ df_insurance = pd.read_csv('insurance_test.csv')
 
 def show_eda_page():
     st.title('Exploratory Data Analysis')
+    df_insurance = pd.read_csv('insurance_test.csv')
      ##EDA METHODS
     all_eda_methods(df_insurance)
     # Load and display your dataset
-    df_insurance = pd.read_csv('insurance_test.csv')
+    
     # st.write(df.head(10))
     # Conduct and display EDA 
     fig = px.histogram(df_insurance, x='age', title='Age Distribution')
