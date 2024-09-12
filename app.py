@@ -177,7 +177,7 @@ def all_eda_methods(df):
 
 def all_insights_methods(df):
     # 1. Pie chart for the distribution of smokers vs non-smokers
-    st.subheader("Proportion of Smokers vs Non-Smokers (Pie Chart)")
+    #st.subheader("Proportion of Smokers vs Non-Smokers (Pie Chart)")
     smoker_counts = df['smoker'].value_counts()
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.pie(smoker_counts, labels=smoker_counts.index, autopct='%1.1f%%', startangle=90, colors=["#66b3ff", "#99ff99"])
@@ -185,7 +185,7 @@ def all_insights_methods(df):
     st.pyplot(fig)
     
     # 2. Pie chart for the distribution of gender
-    st.subheader("Proportion of Male vs Female (Pie Chart)")
+    #st.subheader("Proportion of Male vs Female (Pie Chart)")
     gender_counts = df['sex'].value_counts()
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90, colors=["#ff9999", "#66b3ff"])
@@ -194,14 +194,14 @@ def all_insights_methods(df):
     
 
     # 2. Distribution of BMI and its effect on medical charges (Scatter plot)
-    st.subheader("BMI vs Medical Charges (Scatter Plot)")
+    #st.subheader("BMI vs Medical Charges (Scatter Plot)")
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.scatterplot(x='bmi', y='charges', hue='smoker', data=df, ax=ax)
-    ax.set_title('BMI vs Medical Charges')
+    ax.set_title('BMI vs Insurance Charges')
     st.pyplot(fig)
 
     # 3. Bar chart for average medical charges based on smoker status
-    st.subheader("Average Medical Charges by Smoker Status (Bar Chart)")
+    #st.subheader("Average Medical Charges by Smoker Status (Bar Chart)")
     smoker_charges = df.groupby('smoker')['charges'].mean().reset_index()
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x='smoker', y='charges', data=smoker_charges, ax=ax)
@@ -209,14 +209,14 @@ def all_insights_methods(df):
     st.pyplot(fig)
 
     # 4. Histogram for the distribution of BMI
-    st.subheader("Distribution of BMI (Histogram)")
+    #st.subheader("Distribution of BMI (Histogram)")
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.histplot(df['bmi'], bins=30, kde=True, ax=ax)
     ax.set_title('Distribution of BMI')
     st.pyplot(fig)
 
     # 5. Region-wise analysis of medical charges (Bar Chart)
-    st.subheader("Average Medical Charges by Region (Bar Chart)")
+    #st.subheader("Average Medical Charges by Region (Bar Chart)")
     region_charges = df.groupby('region')['charges'].mean().reset_index()
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x='region', y='charges', data=region_charges, ax=ax)
@@ -224,7 +224,7 @@ def all_insights_methods(df):
     st.pyplot(fig)
 
     # 6. Children and its effect on medical charges (Bar Chart)
-    st.subheader("Average Medical Charges by Number of Children (Bar Chart)")
+    #st.subheader("Average Medical Charges by Number of Children (Bar Chart)")
     children_charges = df.groupby('children')['charges'].mean().reset_index()
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x='children', y='charges', data=children_charges, ax=ax)
@@ -232,7 +232,7 @@ def all_insights_methods(df):
     st.pyplot(fig)
 
     # 7. Medical charges distribution for male vs female (Bar Chart)
-    st.subheader("Average Medical Charges by Gender (Bar Chart)")
+    #st.subheader("Average Medical Charges by Gender (Bar Chart)")
     gender_charges = df.groupby('sex')['charges'].mean().reset_index()
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x='sex', y='charges', data=gender_charges, ax=ax)
