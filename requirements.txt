@@ -4,4 +4,3 @@ scikit-learn
 plotly
 seaborn 
 matplotlib
-pickle
